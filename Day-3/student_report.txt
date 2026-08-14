@@ -1,0 +1,18 @@
+
+Student Report
+
+Total Students: 5000
+
+Average Mark: 71.65
+
+Topper: Emma Johnson
+
+Eng. Students: 1274
+
+CSE Students: 1239
+
+Invalid Records: 0
+
+Missing Values: 1025
+
+Duplicate Records: 0
