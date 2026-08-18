@@ -1,0 +1,96 @@
+import os
+import shutil
+
+# Main folder containing files
+folder = "Files"
+
+# Log file
+log_file = "automation_log.txt"
+
+# File categories and extensions
+categories = {
+    "Images": [".jpg", ".jpeg", ".png", ".gif"],
+    "Documents": [".pdf", ".docx", ".doc", ".txt"],
+    "Data": [".csv", ".xlsx", ".xls", ".json"],
+    "Videos": [".mp4", ".mkv", ".avi"],
+    "Audio": [".mp3", ".wav"],
+    "Programs": [".py", ".java", ".c", ".cpp"],
+    "Unknown": []
+}
+
+# Check whether Files folder exists
+if not os.path.exists(folder):
+    os.makedirs(folder)
+    print("Files folder created.")
+    print("Add some files to the Files folder and run the program again.")
+    exit()
+
+# Create category folders
+for category in categories:
+    category_path = os.path.join(folder, category)
+    os.makedirs(category_path, exist_ok=True)
+
+# Open log file
+with open(log_file, "w", encoding="utf-8") as log:
+
+    # Read all items inside Files folder
+    for filename in os.listdir(folder):
+
+        file_path = os.path.join(folder, filename)
+
+        # Ignore folders
+        if os.path.isdir(file_path):
+            continue
+
+        # Get file extension
+        extension = os.path.splitext(filename)[1].lower()
+
+        found = False
+
+        # Check each category
+        for category, extensions in categories.items():
+
+            if extension in extensions:
+
+                destination = os.path.join(
+                    folder,
+                    category,
+                    filename
+                )
+
+                # Move the file
+                shutil.move(file_path, destination)
+
+                # Write to log
+                log.write(
+                    f"{filename} → {category}\n"
+                )
+
+                print(
+                    f"{filename} → {category}"
+                )
+
+                found = True
+                break
+
+        # Handle unknown extension
+        if not found:
+
+            destination = os.path.join(
+                folder,
+                "Unknown",
+                filename
+            )
+
+            shutil.move(file_path, destination)
+
+            log.write(
+                f"{filename} → Unknown\n"
+            )
+
+            print(
+                f"{filename} → Unknown"
+            )
+
+print("\nFile organization completed!")
+print("Log file created:", log_file)

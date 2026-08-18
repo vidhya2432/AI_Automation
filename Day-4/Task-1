@@ -1,0 +1,50 @@
+import os
+import shutil
+
+source_folder = "Files"
+
+# File categories
+images = [".jpg", ".jpeg", ".png", ".gif"]
+documents = [".pdf", ".doc", ".docx", ".txt"]
+data_files = [".csv", ".xlsx", ".xls"]
+videos = [".mp4", ".avi", ".mkv"]
+
+# Create Organized folder
+organized_folder = os.path.join(source_folder, "Organized")
+
+os.makedirs(organized_folder, exist_ok=True)
+
+# Create category folders
+os.makedirs(os.path.join(organized_folder, "Images"), exist_ok=True)
+os.makedirs(os.path.join(organized_folder, "Documents"), exist_ok=True)
+os.makedirs(os.path.join(organized_folder, "Data"), exist_ok=True)
+os.makedirs(os.path.join(organized_folder, "Videos"), exist_ok=True)
+
+# Read files
+for filename in os.listdir(source_folder):
+
+    file_path = os.path.join(source_folder, filename)
+
+    # Ignore folders
+    if os.path.isfile(file_path):
+
+        extension = os.path.splitext(filename)[1].lower()
+
+        if extension in images:
+            destination = os.path.join(organized_folder, "Images")
+
+        elif extension in documents:
+            destination = os.path.join(organized_folder, "Documents")
+
+        elif extension in data_files:
+            destination = os.path.join(organized_folder, "Data")
+
+        elif extension in videos:
+            destination = os.path.join(organized_folder, "Videos")
+
+        else:
+            continue
+
+        shutil.move(file_path, os.path.join(destination, filename))
+
+print("Files organized successfully!")

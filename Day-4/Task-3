@@ -1,0 +1,96 @@
+import os
+import shutil
+
+
+def create_folders(organized_folder):
+
+    folders = [
+        "Images",
+        "Documents",
+        "Data",
+        "Videos"
+    ]
+
+    os.makedirs(organized_folder, exist_ok=True)
+
+    for folder in folders:
+        folder_path = os.path.join(
+            organized_folder,
+            folder
+        )
+
+        os.makedirs(folder_path, exist_ok=True)
+
+
+def organize_files(source_folder):
+
+    organized_folder = os.path.join(
+        source_folder,
+        "Organized"
+    )
+
+    create_folders(organized_folder)
+
+    images = [".jpg", ".jpeg", ".png", ".gif"]
+    documents = [".pdf", ".doc", ".docx", ".txt"]
+    data_files = [".csv", ".xlsx", ".xls"]
+    videos = [".mp4", ".avi", ".mkv"]
+
+    log_file = os.path.join(
+        source_folder,
+        "automation_log.txt"
+    )
+
+    with open(log_file, "w") as log:
+
+        for filename in os.listdir(source_folder):
+
+            file_path = os.path.join(
+                source_folder,
+                filename
+            )
+
+            # Ignore folders
+            if not os.path.isfile(file_path):
+                continue
+
+            # Ignore log file
+            if filename == "automation_log.txt":
+                continue
+
+            extension = os.path.splitext(
+                filename
+            )[1].lower()
+
+            if extension in images:
+                folder = "Images"
+
+            elif extension in documents:
+                folder = "Documents"
+
+            elif extension in data_files:
+                folder = "Data"
+
+            elif extension in videos:
+                folder = "Videos"
+
+            else:
+                continue
+
+            destination = os.path.join(
+                organized_folder,
+                folder,
+                filename
+            )
+
+            shutil.move(file_path, destination)
+
+            log.write(
+                f"{filename} → {folder}\n"
+            )
+
+
+organize_files("Files")
+
+print("Files organized successfully!")
+print("Log created successfully!")
